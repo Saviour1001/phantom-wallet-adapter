@@ -4,6 +4,7 @@ import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import RPC from "./solanaRPC";
 import "./App.css";
 import { PhantomAdapter } from "@web3auth/phantom-adapter";
+import { SolanaWalletConnectorPlugin } from "@web3auth/solana-wallet-connector-plugin";
 
 const clientId = "YOUR_CLIENT_ID"; // get from https://dashboard.web3auth.io
 
@@ -29,7 +30,23 @@ function App() {
           clientId: "YOUR_CLIENT_ID",
         });
 
+        const torusPlugin = new SolanaWalletConnectorPlugin({
+          torusWalletOpts: {},
+          walletInitOptions: {
+            whiteLabel: {
+              name: "Whitelabel Demo",
+              theme: { isDark: true, colors: { torusBrand1: "#00a8ff" } },
+              logoDark: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+              logoLight: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+              topupHide: true,
+              defaultLanguage: "en",
+            },
+            enableLogging: true,
+          },
+        });
+
         web3auth.configureAdapter(phantomAdapter);
+        await web3auth.addPlugin(torusPlugin);
 
         setWeb3auth(web3auth);
 
